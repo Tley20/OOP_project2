@@ -1,0 +1,127 @@
+{% extends "main/base.html" %}
+{% block title %}Main{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="hero-section position-relative text-center text-white">
+    <img src="{% static 'main/img/home1.png' %}" class="img-fluid w-100 hero-image" alt="Welcome Banner">
+    <div class="hero-overlay d-flex flex-column justify-content-center align-items-center">
+        <h1 class="display-4">Welcome to SkillHorizon!</h1>
+        <p class="lead">Learn new skills and improve with our courses.</p>
+        <div class="mt-3">
+            <a class="btn btn-primary btn-lg me-2" href="{% url 'register' %}">Register</a>
+            <a class="btn btn-outline-light btn-lg" href="{% url 'login' %}">Sign in</a>
+        </div>
+    </div>
+</div>
+
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold">Why Choose SkillHorizon?</h2>
+        <p class="text-muted lead mx-auto" style="max-width: 700px;">
+            SkillHorizon gives you access to high-quality courses, expert instructors, and a supportive learning community.
+        </p>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-lg p-4 text-center h-100">
+                    <i class="bi bi-book-half text-primary fs-1 mb-3"></i>
+                    <h5 class="fw-bold">High-Quality Courses</h5>
+                    <p class="text-muted">
+                        Learn from industry professionals with structured, engaging content.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-lg p-4 text-center h-100">
+                    <i class="bi bi-globe2 text-success fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Flexible Learning</h5>
+                    <p class="text-muted">
+                        Study at your own pace, anytime, anywhere.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-lg p-4 text-center h-100">
+                    <i class="bi bi-award text-warning fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Certified Courses</h5>
+                    <p class="text-muted">
+                        Earn valuable certificates to boost your career.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container text-center mt-5">
+    <h2 class="mt-5">Popular courses</h2>
+    <div class="row mt-4">
+        {% for course in courses %}
+        <div class="col-md-4">
+            <div class="card shadow-lg mb-4">
+                <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ course.title }}</h5>
+                    <p class="card-text">{{ course.description|truncatechars:100 }}</p>
+                    <a href="{% url 'course_detail' course.id %}" class="btn btn-primary">More detailed</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">There are no courses available yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<section class="py-5 bg-light mt-5">
+    <div class="container text-center">
+        <h2 class="fw-bold">Start in 3 Easy Steps</h2>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-4 d-flex">
+                <div class="card border-0 shadow-lg p-4 text-center w-100">
+                    <h1 class="text-primary">1</h1>
+                    <h5 class="fw-bold">Sign Up</h5>
+                    <p class="text-muted">
+                        Register as a student on SkillHorizon and gain access to comprehensive learning resources and engaging courses.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex">
+                <div class="card border-0 shadow-lg p-4 text-center w-100">
+                    <h1 class="text-danger">2</h1>
+                    <h5 class="fw-bold">Choose Your Course</h5>
+                    <p class="text-muted">
+                        Browse through various subjects and select the course that matches your interests and goals.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex">
+                <div class="card border-0 shadow-lg p-4 text-center w-100">
+                    <h1 class="text-success">3</h1>
+                    <h5 class="fw-bold">Start Learning</h5>
+                    <p class="text-muted">
+                        Access video lessons, quizzes, and study materials to enhance your knowledge and skills.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="fw-bold">Ready to Share Your Knowledge?</h2>
+        <p class="lead mx-auto" style="max-width: 700px;">
+            Join thousands of successful instructors on SkillHorizon and turn your passion into profit.
+            We provide the tools and support you need to create engaging courses in any subject,
+            from marketing to design and programming.
+        </p>
+        <a class="btn btn-light btn-lg mt-3" href="#">Start Creating Your Course Today!</a>
+    </div>
+</section>
+
+
+{% endblock %}
