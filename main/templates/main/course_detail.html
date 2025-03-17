@@ -1,0 +1,60 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        {% if course.image %}
+            <img src="{{ course.image.url }}" class="card-img-top rounded-top" alt="{{ course.title }}"
+                 style="height: 300px; width: 100%; object-fit: cover;">
+        {% endif %}
+        <div class="card-body text-center">
+            <h1 class="card-title">{{ course.title }}</h1>
+            <p class="card-text text-muted">{{ course.description }}</p>
+        </div>
+    </div>
+
+    <h2 class="mt-5">Modules</h2>
+    {% for module in modules %}
+        <div class="card mt-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">{{ module.title }}</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for lesson in module.lessons.all %}
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5>{{ lesson.title }}</h5>
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#lesson-{{ lesson.id }}">
+                                    Show/Hide
+                                </button>
+                            </div>
+                            <div class="collapse mt-2" id="lesson-{{ lesson.id }}">
+                                {% if lesson.content_type == "text" and lesson.text_content %}
+                                    <p>{{ lesson.text_content }}</p>
+                                {% endif %}
+
+                                {% if lesson.content_type == "video" and lesson.video_url %}
+                                    <div class="ratio ratio-16x9 mt-3">
+                                        <iframe src="{{ lesson.video_url }}" frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                {% endif %}
+
+                                {% if lesson.file %}
+                                    <p class="mt-2">
+                                        <a href="{{ lesson.file.url }}" class="btn btn-primary" download>Download file</a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">No lessons yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted mt-3">No modules yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

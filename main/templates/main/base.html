@@ -101,21 +101,21 @@
                     <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'homepage' %}">Main</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/courses/' %}active{% endif %}" href="#">Courses</a>
+                    <a class="nav-link {% if request.path == '/courses/' %}active{% endif %}" href="{% url 'course_list'%}">Courses</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="{% url 'logout' %}">Exit</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Enter</a>
+                        <a class="nav-link" href="{% url 'login' %}">Sign in</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Registration</a>
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
                     </li>
                 {% endif %}
             </ul>

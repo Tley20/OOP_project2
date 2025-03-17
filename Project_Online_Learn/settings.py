@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'Project_Online_Learn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'project_db',
+        'NAME': 'OOP_db',
         'USER': 'postgres',
         'PASSWORD': '123456789',
         'HOST': 'localhost',
@@ -134,6 +134,10 @@ AUTH_USER_MODEL = "main.CustomUser"
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1']
 
+import os
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+LOGIN_URL = "/accounts/login/"
 

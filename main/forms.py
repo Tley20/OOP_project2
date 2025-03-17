@@ -22,24 +22,21 @@ class TeacherRegistrationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ["username", "email", "password1", "password2", "subject", "job_title"]
-
-    subject = forms.CharField(max_length=100, required=True)
-    job_title = forms.CharField(max_length=100, required=True)
+        fields = ["username", "email", "password1", "password2"]
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.user_type = "teacher"
         if commit:
             user.save()
-            # Достаем subject и job_title из self.cleaned_data
-            Teacher.objects.create(user=user, subject=self.cleaned_data["subject"], job_title=self.cleaned_data["job_title"])
+            Teacher.objects.create(user=user)
         return user
+
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
-from .models import CustomUser  # Импортируем кастомную модель пользователя
+from .models import CustomUser
 
 class CustomLoginForm(AuthenticationForm):
     user_type = forms.ChoiceField(choices=CustomUser.USER_TYPE_CHOICES, required=True)
@@ -59,3 +56,10 @@ class CustomLoginForm(AuthenticationForm):
 
         return cleaned_data
 
+from django import forms
+from .models import Course
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ["title", "description", "image"]

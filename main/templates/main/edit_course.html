@@ -1,0 +1,74 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4 border-0">
+        <h2 class="text-center mb-4 fw-bold text-primary">Edit Course</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Course Title</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Description</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Category</label>
+                        {{ form.category }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Cover Image</label>
+                        {{ form.image }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+                <button type="submit" class="btn btn-success px-5 py-2 fw-bold">Save Changes</button>
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary ms-3 px-5 py-2 fw-bold">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    label {
+        font-weight: 600;
+    }
+    input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        transition: 0.3s;
+    }
+    input:focus, textarea:focus, select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+    .card {
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .btn-success {
+        background: #28a745;
+        border: none;
+        transition: 0.3s;
+    }
+    .btn-success:hover {
+        background: #218838;
+    }
+    .btn-outline-secondary:hover {
+        background: #6c757d;
+        color: white;
+    }
+</style>
+{% endblock %}

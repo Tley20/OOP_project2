@@ -28,18 +28,6 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-medium">Subject</label>
-                <input type="text" name="subject" class="form-control" value="{{ form.subject.value|default_if_none:'' }}">
-                <small class="text-danger">{{ form.subject.errors }}</small>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-medium">Job Title</label>
-                <input type="text" name="job_title" class="form-control" value="{{ form.job_title.value|default_if_none:'' }}">
-                <small class="text-danger">{{ form.job_title.errors }}</small>
-            </div>
-
-            <div class="mb-3">
                 <label class="form-label fw-medium">Password</label>
                 <input type="password" name="password1" class="form-control">
                 <small class="text-danger">{{ form.password1.errors }}</small>

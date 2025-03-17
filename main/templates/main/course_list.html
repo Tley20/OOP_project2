@@ -1,0 +1,46 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">All Courses</h2>
+
+
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="🔍 Search for a course...">
+    </div>
+
+
+    <div class="row" id="coursesContainer">
+        {% for course in courses %}
+            <div class="col-md-4 course-card">
+                <div class="card mb-4 shadow-sm">
+                    {% if course.image %}
+                        <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                        <a href="{% url 'course_detail' course.id %}" class="btn btn-info">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+document.getElementById('searchInput').addEventListener('input', function() {
+    let searchValue = this.value.toLowerCase();
+    let courses = document.querySelectorAll('.course-card');
+
+    courses.forEach(course => {
+        let title = course.querySelector('.card-title').textContent.toLowerCase();
+        if (title.includes(searchValue)) {
+            course.style.display = 'block';
+        } else {
+            course.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

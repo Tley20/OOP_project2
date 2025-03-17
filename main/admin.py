@@ -21,12 +21,44 @@ class StudentAdmin(admin.ModelAdmin):
 
 class TeacherAdmin(admin.ModelAdmin):
     model = Teacher
-    list_display = ("user", "subject", "job_title")
-    search_fields = ("user__username", "user__email", "subject", "job_title")
-
+    list_display = ("user",)
+    search_fields = ("user__username", "user__email")
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 
+from django.contrib import admin
+from django.utils.html import format_html
+from .models import Course, Module, Lesson
+
+
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ("title", "teacher", "created_at", "course_image")
+    search_fields = ("title", "teacher__username")
+    list_filter = ("created_at",)
+    ordering = ("-created_at",)
+    fields = ("title", "description", "teacher", "image")
+
+    def course_image(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="100" height="60" style="object-fit:cover;"/>', obj.image.url)
+        return "No Image"
+
+    course_image.allow_tags = True
+    course_image.short_description = "Preview"
+
+
+@admin.register(Module)
+class ModuleAdmin(admin.ModelAdmin):
+    list_display = ("title", "course", "order")
+    list_editable = ("order",)
+
+@admin.register(Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    list_display = ("title", "module", "content_type", "order")
+    list_editable = ("order", "content_type")
+    search_fields = ("title", "module__title")
+    list_filter = ("content_type",)
 
