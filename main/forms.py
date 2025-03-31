@@ -63,3 +63,22 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ["title", "description", "image"]
+
+from django import forms
+from .models import Module, Lesson
+
+class ModuleForm(forms.ModelForm):
+    class Meta:
+        model = Module
+        fields = ["title"]
+
+
+from django import forms
+from .models import Lesson
+
+class LessonForm(forms.ModelForm):
+    class Meta:
+        model = Lesson
+        fields = ["title", "content_type", "text_content", "video_url", "file"]
+
+

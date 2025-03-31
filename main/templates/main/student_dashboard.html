@@ -5,16 +5,33 @@
         <h2>Welcome back, {{ user.username }}!</h2>
     </div>
 
+    <h2>Overall Progress</h2>
+    <p>Done: {{ overall_progress }}%</p>
+    <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar"
+            style="width: {{ overall_progress }}%;"
+            aria-valuenow="{{ overall_progress }}" aria-valuemin="0" aria-valuemax="100">
+            {{ overall_progress }}%
+        </div>
+    </div>
 
     <h3 class="mt-5">My Courses</h3>
     <div class="row">
-        {% for enrollment in enrolled_courses %}
+        {% for item in course_progress %}
             <div class="col-md-3">
                 <div class="card shadow-sm mb-4">
-                    <img src="{{ enrollment.course.image.url }}" class="card-img-top" alt="{{ enrollment.course.title }}">
+                    <img src="{{ item.course.image.url }}" class="card-img-top" alt="{{ item.course.title }}">
                     <div class="card-body">
-                        <h5>{{ enrollment.course.title }}</h5>
-                        <a href="{% url 'course_detail' enrollment.course.id %}" class="btn btn-primary w-100">View Course</a>
+                        <h5>{{ item.course.title }}</h5>
+                        <p>Progress: {{ item.progress }}%</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-info" role="progressbar"
+                                style="width: {{ item.progress }}%;"
+                                aria-valuenow="{{ item.progress }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ item.progress }}%
+                            </div>
+                        </div>
+                        <a href="{% url 'course_detail' item.course.id %}" class="btn btn-primary w-100">View Course</a>
                     </div>
                 </div>
             </div>
@@ -22,7 +39,6 @@
             <p class="text-muted">Вы еще не записаны ни на один курс.</p>
         {% endfor %}
     </div>
-
 
     <h3 class="mt-5">Recommended Courses</h3>
     <div class="row">

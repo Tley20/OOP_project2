@@ -28,7 +28,7 @@ admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 
-from django.contrib import admin
+
 from django.utils.html import format_html
 from .models import Course, Module, Lesson
 
@@ -61,4 +61,28 @@ class LessonAdmin(admin.ModelAdmin):
     list_editable = ("order", "content_type")
     search_fields = ("title", "module__title")
     list_filter = ("content_type",)
+
+
+from .models import  CompletedLesson, Enrollment
+
+@admin.register(Enrollment)
+class EnrollmentAdmin(admin.ModelAdmin):
+    list_display = ("get_student_username", "course", "enrolled_at")
+    search_fields = ("student__user__username", "course__title")
+    list_filter = ("enrolled_at",)
+
+    def get_student_username(self, obj):
+        return obj.student.user.username
+    get_student_username.admin_order_field = "student__user__username"
+    get_student_username.short_description = "Student"
+admin.site.register(CompletedLesson)
+
+from django.contrib import admin
+from .models import Certificate
+
+@admin.register(Certificate)
+class CertificateAdmin(admin.ModelAdmin):
+    list_display = ("student", "course", "issued_at")
+    search_fields = ("student__user__username", "course__title")
+    list_filter = ("issued_at",)
 

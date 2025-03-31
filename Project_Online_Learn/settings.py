@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'Project_Online_Learn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'OOP_db',
+        'NAME': 'online_learning',
         'USER': 'postgres',
         'PASSWORD': '123456789',
         'HOST': 'localhost',

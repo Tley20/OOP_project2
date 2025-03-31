@@ -15,6 +15,9 @@ class CustomUser(AbstractUser):
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
 
+    def __str__(self):
+        return self.user.username
+
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
 
@@ -68,6 +71,32 @@ class Lesson(models.Model):
     def __str__(self):
         return f"{self.module.title} - {self.title}"
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            last_lesson = Lesson.objects.filter(module=self.module).order_by("-order").first()
+            self.order = (last_lesson.order + 1) if last_lesson else 1
+        super().save(*args, **kwargs)
+
+    def get_embed_url(self):
+        if self.video_url and "youtube.com/watch?v=" in self.video_url:
+            return self.video_url.replace("watch?v=", "embed/")
+        elif self.video_url and "youtu.be/" in self.video_url:
+            video_id = self.video_url.split("youtu.be/")[-1]
+            return f"https://www.youtube.com/embed/{video_id}"
+        return self.video_url
+
+class CompletedLesson(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="completed_lessons")
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="completed_by")
+    completed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('student', 'lesson')
+
+    def __str__(self):
+        return f"{self.student.user.username} completed {self.lesson.title}"
+
+
 class Enrollment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="enrollments")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="enrollments")
@@ -78,5 +107,20 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f"{self.student.user.username} -> {self.course.title}"
+
+from django.core.files.base import ContentFile
+from reportlab.pdfgen import canvas
+from io import BytesIO
+
+class Certificate(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="certificates")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="certificates")
+    certificate_file = models.FileField(upload_to="certificates/")
+    issued_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('student', 'course')
+
+
 
 
