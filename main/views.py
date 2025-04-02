@@ -387,6 +387,50 @@ def generate_certificate(request, course_id):
                         filename=f"certificate_{course.title}.pdf")
 
 
+from rest_framework import viewsets
+from .models import CustomUser, Course, Module, Lesson, Enrollment, Certificate
+from .serializers import CustomUserSerializer, CourseSerializer, ModuleSerializer, LessonSerializer, EnrollmentSerializer, CertificateSerializer
+
+class CustomUserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+class ModuleViewSet(viewsets.ModelViewSet):
+    queryset = Module.objects.all()
+    serializer_class = ModuleSerializer
+
+class LessonViewSet(viewsets.ModelViewSet):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+
+class EnrollmentViewSet(viewsets.ModelViewSet):
+    queryset = Enrollment.objects.all()
+    serializer_class = EnrollmentSerializer
+
+class CertificateViewSet(viewsets.ModelViewSet):
+    queryset = Certificate.objects.all()
+    serializer_class = CertificateSerializer
+
+import stripe
+from django.conf import settings
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+@api_view(['POST'])
+def create_payment(request):
+    amount = request.data.get('amount')
+    payment_intent = stripe.PaymentIntent.create(
+        amount=amount,
+        currency='usd',
+    )
+    return Response({'client_secret': payment_intent.client_secret})
+
 
 
 

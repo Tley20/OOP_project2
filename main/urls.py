@@ -3,6 +3,31 @@ from . import views
 from .views import login_view
 from django.conf.urls.static import static
 from django.conf import settings
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework.permissions import AllowAny
+from django.urls import include
+from rest_framework.routers import DefaultRouter
+from .views import CourseViewSet, LessonViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="SkillHorizon API",
+        default_version='v1',
+        description="Документация API",
+    ),
+    public=True,
+    permission_classes=[AllowAny],
+)
+
+router = DefaultRouter()
+router.register(r'users', views.CustomUserViewSet)
+router.register(r'courses', views.CourseViewSet)
+router.register(r'modules', views.ModuleViewSet)
+router.register(r'lessons', views.LessonViewSet)
+router.register(r'enrollments', views.EnrollmentViewSet)
+router.register(r'certificates', views.CertificateViewSet)
 urlpatterns = [
     path('', views.homepage, name="homepage"),
     path('register', views.register_choice, name='register'),
@@ -26,4 +51,8 @@ urlpatterns = [
     path("lesson/<int:lesson_id>/delete/", views.delete_lesson, name="delete_lesson"),
     path('lessons/<int:lesson_id>/complete/', views.CompleteLessonView.as_view(), name='complete_lesson'),
     path('course/<int:course_id>/certificate/', views.generate_certificate, name="generate_certificate"),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/', include(router.urls)),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
