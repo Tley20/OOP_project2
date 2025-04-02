@@ -8,6 +8,8 @@ load_dotenv()
 # Используем переменные
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+DOMAIN = "http://localhost:8000"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -110,7 +112,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-# JWT Settings
+
 from datetime import timedelta
 
 SIMPLE_JWT = {
@@ -118,7 +120,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
-# Stripe API Key settings
+
 import stripe
 from django.conf import settings
 from django.http import JsonResponse
