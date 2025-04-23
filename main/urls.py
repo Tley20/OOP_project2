@@ -10,6 +10,8 @@ from django.urls import include
 from rest_framework.routers import DefaultRouter
 from .views import CourseViewSet, LessonViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views import CourseReviewViewSet
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -28,6 +30,8 @@ router.register(r'modules', views.ModuleViewSet)
 router.register(r'lessons', views.LessonViewSet)
 router.register(r'enrollments', views.EnrollmentViewSet)
 router.register(r'certificates', views.CertificateViewSet)
+router.register(r'course-reviews', CourseReviewViewSet)
+
 urlpatterns = [
     path('', views.homepage, name="homepage"),
     path('register', views.register_choice, name='register'),
@@ -53,6 +57,8 @@ urlpatterns = [
     path('course/<int:course_id>/certificate/', views.generate_certificate, name="generate_certificate"),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/', include(router.urls)),
+    path('course/<int:course_id>/submit_review/', views.submit_review, name='submit_review'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
 ] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from .models import CourseReview
+
 from .models import CustomUser, Course, Module, Lesson, Enrollment, Certificate
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -42,3 +44,9 @@ class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
         fields = ['id', 'student', 'course', 'certificate_file', 'issued_at']
+class CourseReviewSerializer(serializers.ModelSerializer):
+    student = CustomUserSerializer()  # Для отображения информации о студенте
+
+    class Meta:
+        model = CourseReview
+        fields = ['id', 'course', 'student', 'rating', 'comment', 'created_at']

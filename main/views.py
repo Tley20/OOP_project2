@@ -1,7 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render , get_object_or_404, redirect
 from django.http import HttpResponse
 from main.models import Course
 from django.db.models import Count
+from .serializers import CourseReviewSerializer
+from .models import CourseReview , Course # Добавить импорт модели CourseReview
+from .models import Course, CourseReview, Student
+from django.contrib import messages
+
 
 def homepage(request):
     popular_courses = Course.objects.annotate(num_students=Count('enrollments')).order_by('-num_students')[:6]
@@ -435,3 +440,28 @@ def create_payment(request):
 
 
 
+
+class CourseReviewViewSet(viewsets.ModelViewSet):
+    queryset = CourseReview.objects.all()
+    serializer_class = CourseReviewSerializer
+    
+
+def submit_review(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    custom_user = request.user  # Получаем CustomUser из текущего пользователя
+    rating = request.POST.get('rating')
+    comment = request.POST.get('comment')
+
+    if CourseReview.objects.filter(course=course, student=custom_user).exists():
+        # Если отзыв уже существует
+        return redirect("course_detail", pk=course.id)
+    
+    # Создаем новый отзыв
+    CourseReview.objects.create(
+        course=course,
+        student=custom_user,  # Используем CustomUser
+        rating=rating,
+        comment=comment
+    )
+
+    return redirect("course_detail", pk=course.id)

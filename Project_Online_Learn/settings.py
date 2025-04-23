@@ -67,7 +67,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'online_learning',
         'USER': 'postgres',
-        'PASSWORD': '123456789',
+        'PASSWORD': '112309',
         'HOST': 'localhost',
         'PORT': '5432',
     }
